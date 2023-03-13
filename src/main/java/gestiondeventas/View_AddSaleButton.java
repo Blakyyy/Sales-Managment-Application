@@ -18,8 +18,8 @@ public class View_AddSaleButton implements ActionListener{
     private static JFrame frame;
     private static JPanel panel;
     private static JLabel name, price, amount, date, success;
-    private static JTextField nameText, priceText, amountText, dateText, successText;
-    private static JButton confirm;
+    private static JTextField nameText, priceText, amountText, dateText;
+    private static JButton confirm, goBack;
     
 
     public View_AddSaleButton(){
@@ -85,12 +85,20 @@ public class View_AddSaleButton implements ActionListener{
         constraints.gridwidth = 1;
         panel.add(confirm, constraints);
 
+        goBack = new JButton("<-");
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.gridwidth = 1;
+        panel.add(goBack, constraints);
+        goBack.addActionListener(this);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(panel);
         frame.pack();
         frame.setVisible(true);
     }
-
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == confirm){
@@ -102,7 +110,8 @@ public class View_AddSaleButton implements ActionListener{
                     if(!Model_AddSale.checkForDate(dateText.getText()).equals("InvalidDateFormat")){
                         String dateOfSale = dateText.getText();
                         int idUser = Model_MainPage.getUserId(View_Login.getUsernameText());
-                        Model_MainPage.addToSales(productName, price, saleQuantity, dateOfSale, idUser);
+                        int idVentasForEachUser = Model_MainPage.maxNumForIdVentasEachUser(idUser) + 1;
+                        Model_MainPage.addToSales(productName, price, saleQuantity, dateOfSale, idUser, idVentasForEachUser);
                         success.setText("Product was added successfully");
                     }
                     else{
@@ -120,6 +129,13 @@ public class View_AddSaleButton implements ActionListener{
             
             
         }
+        else if(e.getSource() == goBack){
+            frame.dispose();
+            new View_MainPage();
+        }
     }
+
+    
+    
     
 }

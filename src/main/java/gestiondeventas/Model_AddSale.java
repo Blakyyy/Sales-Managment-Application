@@ -1,8 +1,5 @@
 package gestiondeventas;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 
 public class Model_AddSale {
     public static String checkForComa(String str){

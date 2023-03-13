@@ -75,7 +75,7 @@ public class View_Login extends Model_RegAndLog implements ActionListener{
         if(appMethods.tryToLogin(userAndPass[0], userAndPass[1], appMethods.getUrl(), appMethods.getAdmin(), appMethods.getPasskey()) == true){
             usernameText = userText.getText();
             frame.dispose();
-            View_MainPage mp = new View_MainPage();
+            new View_MainPage();
         }
         else if(userAndPass[0].equals("") || userAndPass[1].equals("")){
             success.setText("Username and password fields are obligatory");
@@ -86,7 +86,7 @@ public class View_Login extends Model_RegAndLog implements ActionListener{
         }
         if(e.getSource() == registerButton){
             frame.dispose();
-            View_Reg reg = new View_Reg();
+            new View_Reg();
         }
     }
     

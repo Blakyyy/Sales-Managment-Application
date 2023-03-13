@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.JTextField;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -36,8 +35,7 @@ public class Model_RegAndLog {
     We use this method with TryToLogin method and with SignUp method
     */
     public static boolean userAlreadyExists(String username, String url, String admin, String passkey){
-        try {
-            Connection connection = DriverManager.getConnection(url, admin, passkey);
+        try(Connection connection = DriverManager.getConnection(url, admin, passkey)) {
             PreparedStatement statement = connection.prepareStatement("select * from GestionDeVentas.users order by username; ");
             ResultSet r1 = statement.executeQuery();
             String usernameCounter;
@@ -56,8 +54,7 @@ public class Model_RegAndLog {
 
     //This method is used to check if userInput password is equals to the password of this username in the database
     public static boolean checkForPassword(String username, String password, String url, String admin, String passkey){
-        try {
-            Connection connection = DriverManager.getConnection(url, admin, passkey);
+        try(Connection connection = DriverManager.getConnection(url, admin, passkey)) {
             PreparedStatement statement = connection.prepareStatement("select password from GestionDeVentas.users where username = ?;");
             statement.setString(1, username);
             ResultSet r1 = statement.executeQuery();
@@ -79,8 +76,7 @@ public class Model_RegAndLog {
         it also checks if there is already a user with the same username in the database
     */
     public int signUp(String admin, String url, String passkey, String username, String password, String email){
-        try {
-            Connection connection = DriverManager.getConnection(url, admin, passkey);
+        try(Connection connection = DriverManager.getConnection(url, admin, passkey)) {
             if(userAlreadyExists(username, url, admin, passkey) == false){
                 if(email.contains("@")){
                     System.out.println("ok");
