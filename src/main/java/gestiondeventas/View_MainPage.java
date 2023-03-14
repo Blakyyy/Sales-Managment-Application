@@ -80,8 +80,8 @@ public class View_MainPage implements ActionListener{
         else if(e.getSource() == deleteSale){
             int selectedRow = table.getSelectedRow();
             if(selectedRow != -1){
+                Model_MainPage.deleteSale(selectedRow + 1);
                 frame.dispose();
-                Model_MainPage.deleteSale(selectedRow);
                 new View_MainPage();
             }
         }
