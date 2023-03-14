@@ -75,7 +75,7 @@ public class View_Login extends Model_RegAndLog implements ActionListener{
         if(appMethods.tryToLogin(userAndPass[0], userAndPass[1], appMethods.getUrl(), appMethods.getAdmin(), appMethods.getPasskey()) == true){
             usernameText = userText.getText();
             frame.dispose();
-            new View_MainPage();
+            new View_MainPage(View_MainPage.getSalesList());
         }
         else if(userAndPass[0].equals("") || userAndPass[1].equals("")){
             success.setText("Username and password fields are obligatory");
