@@ -162,5 +162,20 @@ public class Model_MainPage {
         }
         return sales;
     }
+
+    public static List<Sales> getInfoVentasTable(){
+        List<Sales> salesUpdated = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GestionDeVentas.ventas");
+            ResultSet r1 = statement.executeQuery();
+            while(r1.next()){
+                Sales sales = new Sales(r1.getInt("idVentasForEachUser"), r1.getString("nombre"), r1.getDouble("precio"), r1.getInt("cantidadVendida"), r1.getString("fechaDeVenta"));
+                salesUpdated.add(sales);
+            }
+        } catch (SQLException e) {
+           e.printStackTrace();
+        }
+        return salesUpdated;
+    }
     
 }

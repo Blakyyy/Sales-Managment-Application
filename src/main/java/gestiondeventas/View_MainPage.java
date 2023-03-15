@@ -173,7 +173,7 @@ public class View_MainPage implements ActionListener{
             if(selectedRow != -1){
                 Model_MainPage.deleteSale(selectedRow + 1);
                 frame.dispose();
-                new View_MainPage(salesList);
+                new View_MainPage(Model_MainPage.getInfoVentasTable());
             }
         }
     }
