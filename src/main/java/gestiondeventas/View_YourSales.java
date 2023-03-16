@@ -1,6 +1,8 @@
 package gestiondeventas;
 
-
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,9 +40,12 @@ public class View_YourSales implements ActionListener{
         frame.setBounds(300, 300, 600, 400);
     
         panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        panel.setLayout(new GridBagLayout());
 
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
+
+        JLabel successLabel = new JLabel("");
+        successLabel.setHorizontalAlignment(JLabel.CENTER);
     
         String[] columnNames = {"Id", "Name", "Price", "Quantity", "Date"};
         Object[][] data = new Object[sale.size()][5];
@@ -51,7 +56,13 @@ public class View_YourSales implements ActionListener{
             data[i][3] = sale.get(i).getAmountOfSale();
             data[i][4] = sale.get(i).getFechaDeVenta();
         }
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
         table = new JTable(model);
     
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -168,25 +179,29 @@ public class View_YourSales implements ActionListener{
     
     
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == addSale){
+@Override
+public void actionPerformed(ActionEvent e) {
+    if(e.getSource() == addSale){
+        frame.dispose();
+        new View_AddSaleFromProducts(Model_YourProducts.getInfoProductsTable(Model_YourSales.getUserId(View_Login.getUsernameText())));
+    }
+    else if(e.getSource() == deleteSale){
+        int selectedRow = table.getSelectedRow();
+        if(selectedRow != -1){
+            int idValue = (int) table.getValueAt(selectedRow, 0); 
+            Model_YourSales.deleteSale(idValue, Model_YourSales.getUserId(View_Login.getUsernameText()));
             frame.dispose();
-            new View_AddSaleButton();
+            new View_YourSales(Model_YourSales.getInfoVentasTable());
         }
-        else if(e.getSource() == deleteSale){
-            int selectedRow = table.getSelectedRow();
-            if(selectedRow != -1){
-                Model_YourSales.deleteSale(selectedRow + 1, Model_YourSales.getUserId(View_Login.getUsernameText()));
-                frame.dispose();
-                new View_YourSales(Model_YourSales.getInfoVentasTable());
-            }
-        }
-        else if(e.getSource() == goBack){
-            frame.dispose();
-            new View_MainPage();
+        else{
+
         }
     }
+    else if(e.getSource() == goBack){
+        frame.dispose();
+        new View_MainPage();
+    }
+}
 
     public static List<Sales> getSalesList() {
         return salesList;

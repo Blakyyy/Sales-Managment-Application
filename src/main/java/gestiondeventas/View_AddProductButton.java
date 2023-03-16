@@ -92,7 +92,7 @@ public class View_AddProductButton implements ActionListener{
         constraints.gridwidth = 1;
         panel.add(confirm, constraints);
     
-        goBack = new JButton("<-");
+        goBack = new JButton("←");
         constraints.gridx = 0;
         constraints.gridy = 6;
         constraints.gridwidth = 1;

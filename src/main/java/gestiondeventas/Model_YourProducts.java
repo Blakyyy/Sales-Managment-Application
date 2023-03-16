@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.protobuf.TypeRegistry;
+import com.mysql.cj.protocol.WatchableOutputStream;
+
 
 public class Model_YourProducts {
     private static String url = "jdbc:mysql://localhost:3306/?user=root";
@@ -184,5 +187,67 @@ public class Model_YourProducts {
         return products;
     }
 
+    public static List<Products> searchForProductByName(int userId, String userInput){
+        List<Products> productsList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GestionDeVentas.productos WHERE nombre LIKE ?;");
+            statement.setString(1, userInput + "%");
+            ResultSet r1 = statement.executeQuery();
+            while(r1.next()){
+                Products product = new Products(r1.getInt("id_productosForEachUser"), r1.getString("nombre"), r1.getString("descripcion"), r1.getDouble("precio"), r1.getInt("stock"), userId , r1.getInt("min_stock_alert"));
+                productsList.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productsList;
+    }
+
+    public static String getNameOfProduct(int userId, int id_ProductosForEachUser){
+        String nombre = "";
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT nombre FROM GestionDeVentas.productos WHERE id_user = ? AND id_productosForEachUser = ?; ");
+            statement.setInt(1, userId);
+            statement.setInt(2, id_ProductosForEachUser);
+            ResultSet r1 = statement.executeQuery();
+            while(r1.next()){
+                nombre = r1.getString("nombre");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nombre;
+    }
+
+    public static Double getPrecio(int userId, int id_ProductosForEachUser){
+        Double precio = 0.0;
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT precio FROM GestionDeVentas.productos WHERE id_user = ? AND id_productosForEachUser = ?; ");
+            statement.setInt(1, userId);
+            statement.setInt(2, id_ProductosForEachUser);
+            ResultSet r1 = statement.executeQuery();
+            while(r1.next()){
+                precio = r1.getDouble("precio");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return precio;
+
+    }
+
+    public static boolean updateProductTable(int stock, int user_Id, int id_ProductosForEachUser){
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE GestionDeVentas.productos SET stock = stock - ? WHERE id_user = ? AND id_productosForEachUser = ?;");
+            statement.setInt(1, stock);
+            statement.setInt(2, user_Id);
+            statement.setInt(3, id_ProductosForEachUser);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     
 }

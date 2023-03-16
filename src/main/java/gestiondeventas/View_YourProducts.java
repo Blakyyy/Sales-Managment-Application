@@ -3,7 +3,7 @@ package gestiondeventas;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.List;
-
+import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 public class View_YourProducts implements ActionListener{
 
@@ -29,6 +31,7 @@ public class View_YourProducts implements ActionListener{
     private JPanel panel;
     private JTable table;
     private JButton addProduct, deleteProduct, goBack;
+    private static JLabel successLabel;
 
     public View_YourProducts(List<Products> products) {
         frame = new JFrame("Your Inventory");
@@ -38,6 +41,7 @@ public class View_YourProducts implements ActionListener{
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
         panel = new JPanel(new BorderLayout());
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
 
         addProduct = new JButton("Add product");
         addProduct.addActionListener(this);
@@ -47,11 +51,13 @@ public class View_YourProducts implements ActionListener{
         deleteProduct.addActionListener(this);
         deleteProduct.setFont(buttonFont);
 
+        successLabel = new JLabel("");
+        successLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        successLabel.setHorizontalAlignment(JLabel.CENTER);
+
         goBack = new JButton("←");
         goBack.addActionListener(this);
         goBack.setFont(buttonFont);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout());
 
         JMenuBar menuBar = new JMenuBar();
         Border roundedBorder = BorderFactory.createLineBorder(Color.BLACK, 2, false);
@@ -133,6 +139,9 @@ public class View_YourProducts implements ActionListener{
                 new View_YourProducts(products);
             }
     });
+        JPanel successPanel = new JPanel(new BorderLayout());
+        successPanel.add(successLabel, BorderLayout.CENTER);
+        
 
         idAscItem.setFont(buttonFont);
         idDescItem.setFont(buttonFont);
@@ -153,12 +162,40 @@ public class View_YourProducts implements ActionListener{
         sortMenu.add(maxStockDescItem);
         menuBar.add(sortMenu);
 
-        panel.add(buttonPanel, BorderLayout.NORTH);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        buttonPanel.add(menuBar, gbc);
         
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        buttonPanel.add(addProduct, gbc);
+    
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        buttonPanel.add(deleteProduct, gbc);
+    
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        buttonPanel.add(goBack, gbc);
+    
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        buttonPanel.add(successLabel, gbc);
+
         panel.add(buttonPanel, BorderLayout.NORTH);
+        panel.add(successPanel, BorderLayout.SOUTH);
 
         String[] columnNames = {"ID", "Name", "Description", "Price", "Stock", "Minimum Stock Alert"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
 
         for (Products product : products) {
             Object[] rowData = {product.getIdProductsForEachUser(), product.getName(), product.getDescription(), product.getPrecio(), product.getStock(), product.getMin_stock_alert()};
@@ -217,6 +254,9 @@ public class View_YourProducts implements ActionListener{
                 Model_YourProducts.deleteProduct(selectedRow + 1, Model_YourSales.getUserId(View_Login.getUsernameText()));
                 frame.dispose();
                 new View_YourProducts(Model_YourProducts.getInfoProductsTable(Model_YourSales.getUserId(View_Login.getUsernameText())));
+            }
+            else{
+                successLabel.setText("Please select a row before proceeding");
             }
         }
         else if(e.getSource() == goBack){
