@@ -109,9 +109,9 @@ public class View_AddSaleButton implements ActionListener{
                     int saleQuantity = Integer.parseInt(amountText.getText());
                     if(!Model_AddSale.checkForDate(dateText.getText()).equals("InvalidDateFormat")){
                         String dateOfSale = dateText.getText();
-                        int idUser = Model_MainPage.getUserId(View_Login.getUsernameText());
-                        int idVentasForEachUser = Model_MainPage.maxNumForIdVentasEachUser(idUser) + 1;
-                        Model_MainPage.addToSales(productName, price, saleQuantity, dateOfSale, idUser, idVentasForEachUser);
+                        int idUser = Model_YourSales.getUserId(View_Login.getUsernameText());
+                        int idVentasForEachUser = Model_YourSales.maxNumForIdVentasEachUser(idUser) + 1;
+                        Model_YourSales.addToSales(productName, price, saleQuantity, dateOfSale, idUser, idVentasForEachUser);
                         success.setText("Product was added successfully");
                     }
                     else{
@@ -131,7 +131,7 @@ public class View_AddSaleButton implements ActionListener{
         }
         else if(e.getSource() == goBack){
             frame.dispose();
-            new View_MainPage(Model_MainPage.getInfoVentasTable());
+            new View_YourSales(Model_YourSales.getInfoVentasTable());
         }
     }
 

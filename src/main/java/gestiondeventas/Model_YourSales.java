@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-public class Model_MainPage {
+public class Model_YourSales {
     private static String url = "jdbc:mysql://localhost:3306/?user=root";
     private static String admin = "root";
     private static String passkey = "6751221T";
@@ -77,18 +77,18 @@ public class Model_MainPage {
         return saleList;
     }
 
-    public static boolean deleteSale(int idVentasForEachUser){
+    public static boolean deleteSale(int idVentasForEachUser, int userId){
         try(Connection connection = DriverManager.getConnection(url, admin, passkey)) {
             // Delete the sale with the given ID
-            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM GestionDeVentas.ventas WHERE idVentasForEachUser = ?");
+            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM GestionDeVentas.ventas WHERE idVentasForEachUser = ? AND id_users = ?");
             deleteStatement.setInt(1, idVentasForEachUser);
+            deleteStatement.setInt(2, userId);
             deleteStatement.executeUpdate();
             
-            // Update the IDs of the remaining sales
-            PreparedStatement updateStatement = connection.prepareStatement("UPDATE GestionDeVentas.ventas SET idVentasForEachUser = idVentasForEachUser - 1 WHERE idVentasForEachUser > ?");
+            PreparedStatement updateStatement = connection.prepareStatement("UPDATE GestionDeVentas.ventas SET idVentasForEachUser = idVentasForEachUser - 1 WHERE idVentasForEachUser > ? AND id_users = ?");
             updateStatement.setInt(1, idVentasForEachUser);
+            updateStatement.setInt(2, userId);
             updateStatement.executeUpdate();
-            
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

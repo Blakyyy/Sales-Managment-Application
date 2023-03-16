@@ -1,0 +1,227 @@
+package gestiondeventas;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Font;
+
+public class View_YourProducts implements ActionListener{
+
+    private JFrame frame;
+    private JPanel panel;
+    private JTable table;
+    private JButton addProduct, deleteProduct, goBack;
+
+    public View_YourProducts(List<Products> products) {
+        frame = new JFrame("Your Inventory");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 500);
+
+        Font buttonFont = new Font("Arial", Font.PLAIN, 14);
+
+        panel = new JPanel(new BorderLayout());
+
+        addProduct = new JButton("Add product");
+        addProduct.addActionListener(this);
+        addProduct.setFont(buttonFont);
+
+        deleteProduct = new JButton("Delete product");
+        deleteProduct.addActionListener(this);
+        deleteProduct.setFont(buttonFont);
+
+        goBack = new JButton("←");
+        goBack.addActionListener(this);
+        goBack.setFont(buttonFont);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+
+        JMenuBar menuBar = new JMenuBar();
+        Border roundedBorder = BorderFactory.createLineBorder(Color.BLACK, 2, false);
+        Border emptyBorder = BorderFactory.createEmptyBorder(5, 10, 5, 10);
+        Border compoundBorder = BorderFactory.createCompoundBorder(roundedBorder, emptyBorder);
+        menuBar.setBorder(compoundBorder);
+        menuBar.setFont(buttonFont);
+        menuBar.setOpaque(true);
+        menuBar.setBackground(new Color(238, 238, 238));
+        JMenu sortMenu = new JMenu("Sort by");
+        sortMenu.setFont(buttonFont);
+        
+        buttonPanel.add(menuBar);
+        buttonPanel.add(addProduct);
+        buttonPanel.add(deleteProduct);
+        buttonPanel.add(goBack);
+
+        JMenuItem idAscItem = new JMenuItem("Id(↑)");
+        idAscItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortById(Model_YourSales.getUserId(View_Login.getUsernameText()), "ASC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem idDescItem = new JMenuItem("Id(↓)");
+        idDescItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortById(Model_YourSales.getUserId(View_Login.getUsernameText()), "DESC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem priceAscItem = new JMenuItem("Price(↑)");
+        priceAscItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByPrice(Model_YourSales.getUserId(View_Login.getUsernameText()), "ASC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem priceDescItem = new JMenuItem("Price(↓)");
+        priceDescItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByPrice(Model_YourSales.getUserId(View_Login.getUsernameText()), "DESC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem stockAscItem = new JMenuItem("Stock(↑)");
+        stockAscItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByStock(Model_YourSales.getUserId(View_Login.getUsernameText()), "ASC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem stockDescItem = new JMenuItem("Stock(↓)");
+        stockDescItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByStock(Model_YourSales.getUserId(View_Login.getUsernameText()), "DESC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem minStockDescItem = new JMenuItem("Minimum Stock Alert(↑)");
+        minStockDescItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByMinStockAlert(Model_YourSales.getUserId(View_Login.getUsernameText()), "ASC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+        });
+        JMenuItem maxStockDescItem = new JMenuItem("Minimum Stock Alert(↓)");
+        maxStockDescItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Products> products = Model_YourProducts.sortByMinStockAlert(Model_YourSales.getUserId(View_Login.getUsernameText()), "DESC");
+                frame.dispose();
+                new View_YourProducts(products);
+            }
+    });
+
+        idAscItem.setFont(buttonFont);
+        idDescItem.setFont(buttonFont);
+        priceAscItem.setFont(buttonFont);
+        priceDescItem.setFont(buttonFont);
+        stockAscItem.setFont(buttonFont);
+        stockDescItem.setFont(buttonFont);
+        minStockDescItem.setFont(buttonFont);
+        maxStockDescItem.setFont(buttonFont);
+
+        sortMenu.add(idAscItem);
+        sortMenu.add(idDescItem);
+        sortMenu.add(priceAscItem);
+        sortMenu.add(priceDescItem);
+        sortMenu.add(stockAscItem);
+        sortMenu.add(stockDescItem);
+        sortMenu.add(minStockDescItem);
+        sortMenu.add(maxStockDescItem);
+        menuBar.add(sortMenu);
+
+        panel.add(buttonPanel, BorderLayout.NORTH);
+        
+        panel.add(buttonPanel, BorderLayout.NORTH);
+
+        String[] columnNames = {"ID", "Name", "Description", "Price", "Stock", "Minimum Stock Alert"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+
+        for (Products product : products) {
+            Object[] rowData = {product.getIdProductsForEachUser(), product.getName(), product.getDescription(), product.getPrecio(), product.getStock(), product.getMin_stock_alert()};
+            tableModel.addRow(rowData);
+        }
+
+        table = new JTable(tableModel);
+        int[] columnWidths = {30, 150, 250, 50, 50, 150};
+        for (int i = 0; i < columnWidths.length; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+        }
+
+        table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineTableCellRenderer());
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    private class MultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
+        public MultiLineTableCellRenderer() {
+            setLineWrap(true);
+            setWrapStyleWord(true);
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            setSize(table.getColumnModel().getColumn(column).getWidth(), 0);
+            int height_needed = getPreferredSize().height;
+            if (table.getRowHeight(row) != height_needed) {
+                table.setRowHeight(row, height_needed);
+            }
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                setBackground(table.getBackground());
+                setForeground(table.getForeground());
+            }
+            return this;
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == addProduct){
+            frame.dispose();
+            new View_AddProductButton();
+        }
+        else if(e.getSource() == deleteProduct){
+            int selectedRow = table.getSelectedRow();
+            if(selectedRow != -1){
+                Model_YourProducts.deleteProduct(selectedRow + 1, Model_YourSales.getUserId(View_Login.getUsernameText()));
+                frame.dispose();
+                new View_YourProducts(Model_YourProducts.getInfoProductsTable(Model_YourSales.getUserId(View_Login.getUsernameText())));
+            }
+        }
+        else if(e.getSource() == goBack){
+            frame.dispose();
+            new View_MainPage();
+        }
+    }
+}
