@@ -52,7 +52,7 @@ public class View_YourProducts implements ActionListener{
         deleteProduct.setFont(buttonFont);
 
         successLabel = new JLabel("");
-        successLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        successLabel.setFont(buttonFont);
         successLabel.setHorizontalAlignment(JLabel.CENTER);
 
         goBack = new JButton("←");

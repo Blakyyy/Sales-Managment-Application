@@ -16,10 +16,10 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -30,6 +30,7 @@ public class View_YourSales implements ActionListener{
     private static JFrame frame;
     private static JPanel panel;
     private static JButton addSale, deleteSale, goBack;
+    private static JLabel successLabel;
     private static JTable table;
     private static List<Sales> salesList = Model_YourSales.getSalesObject(Model_YourSales.getUserId(View_Login.getUsernameText()));
     private static int selectedRow = -1;
@@ -37,16 +38,29 @@ public class View_YourSales implements ActionListener{
     public View_YourSales(List<Sales> sale) {
         frame = new JFrame("Your sales");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(300, 300, 600, 400);
-    
-        panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-
+        frame.setSize(800,500 );
+        
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
-        JLabel successLabel = new JLabel("");
+        panel = new JPanel(new BorderLayout());
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        
+        addSale = new JButton("Add sale");
+        addSale.addActionListener(this);
+        addSale.setFont(buttonFont);
+
+        deleteSale = new JButton("Delete sale");
+        deleteSale.addActionListener(this);
+        deleteSale.setFont(buttonFont);
+
+        successLabel = new JLabel("");
+        successLabel.setFont(buttonFont);
         successLabel.setHorizontalAlignment(JLabel.CENTER);
-    
+
+        goBack = new JButton("←");
+        goBack.addActionListener(this);
+        goBack.setFont(buttonFont);
+
         String[] columnNames = {"Id", "Name", "Price", "Quantity", "Date"};
         Object[][] data = new Object[sale.size()][5];
         for (int i = 0; i < sale.size(); i++) {
@@ -62,21 +76,18 @@ public class View_YourSales implements ActionListener{
                 return false;
             }
         };
-        
-        table = new JTable(model);
     
+        table = new JTable(model);
+        
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 selectedRow = table.getSelectedRow();
             }
         });
-        JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane, BorderLayout.CENTER);
-    
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.setPreferredSize(new Dimension(600, 40));
+       
 
+    
         JMenuBar menuBar = new JMenuBar();
         Border roundedBorder = BorderFactory.createLineBorder(Color.BLACK, 2, false);
         Border emptyBorder = BorderFactory.createEmptyBorder(5, 10, 5, 10);
@@ -87,24 +98,10 @@ public class View_YourSales implements ActionListener{
         menuBar.setBackground(new Color(238, 238, 238));
         JMenu sortMenu = new JMenu("Sort by");
         sortMenu.setFont(buttonFont);
-        buttonPanel.add(menuBar);
         
-        addSale = new JButton("Add sale");
-        addSale.setPreferredSize(new Dimension(150, 30));
-        addSale.setFont(buttonFont);
-        addSale.addActionListener(this);
+        buttonPanel.add(menuBar);
         buttonPanel.add(addSale);
-    
-        deleteSale = new JButton("Delete sale");
-        deleteSale.setPreferredSize(new Dimension(150, 30));
-        deleteSale.setFont(buttonFont);
-        deleteSale.addActionListener(this);
         buttonPanel.add(deleteSale);
-
-        goBack = new JButton("←");
-        goBack.setPreferredSize(new Dimension(150, 30));
-        goBack.setFont(buttonFont);
-        goBack.addActionListener(this);
         buttonPanel.add(goBack);
         
         JMenuItem idAscItem = new JMenuItem("Id(↑)");
@@ -156,23 +153,54 @@ public class View_YourSales implements ActionListener{
             }
     });
 
+    JPanel successPanel = new JPanel(new BorderLayout());
+    successPanel.add(successLabel, BorderLayout.CENTER);
+    
     idAscItem.setFont(buttonFont);
     idDescItem.setFont(buttonFont);
     priceAscItem.setFont(buttonFont);
     priceDescItem.setFont(buttonFont);
     amountAscItem.setFont(buttonFont);
     amountDescItem.setFont(buttonFont);
-
+    
     sortMenu.add(idAscItem);
     sortMenu.add(idDescItem);
     sortMenu.add(priceAscItem);
     sortMenu.add(priceDescItem);
     sortMenu.add(amountAscItem);
     sortMenu.add(amountDescItem);
+
     menuBar.add(sortMenu);
 
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    buttonPanel.add(menuBar, gbc);
+    
+    gbc.gridx = 1;
+    gbc.gridy = 0;
+    buttonPanel.add(addSale, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = 0;
+    buttonPanel.add(deleteSale, gbc);
+
+    gbc.gridx = 3;
+    gbc.gridy = 0;
+    buttonPanel.add(goBack, gbc);
+
+    gbc.gridx = 1;
+    gbc.gridy = 1;
+    gbc.gridwidth = 2;
+    gbc.anchor = GridBagConstraints.CENTER;
+    buttonPanel.add(successLabel, gbc);
+
     panel.add(buttonPanel, BorderLayout.NORTH);
-   
+    panel.add(successPanel, BorderLayout.SOUTH);
+
+    JScrollPane scrollPane = new JScrollPane(table);
+    panel.add(scrollPane, BorderLayout.CENTER);
+
     frame.add(panel);
     frame.setVisible(true);
 }
@@ -194,7 +222,7 @@ public void actionPerformed(ActionEvent e) {
             new View_YourSales(Model_YourSales.getInfoVentasTable());
         }
         else{
-
+            successLabel.setText("Please select a row before proceeding");
         }
     }
     else if(e.getSource() == goBack){
