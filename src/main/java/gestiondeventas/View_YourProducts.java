@@ -33,7 +33,7 @@ public class View_YourProducts implements ActionListener{
     private JFrame frame;
     private JPanel panel;
     private JTable table;
-    private JButton addProduct, deleteProduct, goBack;
+    private JButton addProduct, deleteProduct, editStock, goBack;
     private JTextField searchBar;
     private DefaultTableModel tableModel;
     private static JLabel successLabel;
@@ -56,13 +56,17 @@ public class View_YourProducts implements ActionListener{
         deleteProduct.addActionListener(this);
         deleteProduct.setFont(buttonFont);
 
-        successLabel = new JLabel("");
-        successLabel.setFont(buttonFont);
-        successLabel.setHorizontalAlignment(JLabel.CENTER);
+        editStock = new JButton("Edit stock");
+        editStock.addActionListener(this);
+        editStock.setFont(buttonFont);
 
         goBack = new JButton("←");
         goBack.addActionListener(this);
         goBack.setFont(buttonFont);
+
+        successLabel = new JLabel("");
+        successLabel.setFont(buttonFont);
+        successLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JMenuBar menuBar = new JMenuBar();
         Border roundedBorder = BorderFactory.createLineBorder(Color.BLACK, 2, false);
@@ -223,8 +227,12 @@ public class View_YourProducts implements ActionListener{
         gbc.gridx = 4;
         gbc.gridy = 0;
         buttonPanel.add(deleteProduct, gbc);
-    
+
         gbc.gridx = 5;
+        gbc.gridy = 0;
+        buttonPanel.add(editStock, gbc);
+    
+        gbc.gridx = 6;
         gbc.gridy = 0;
         buttonPanel.add(goBack, gbc);
     
@@ -344,12 +352,20 @@ public class View_YourProducts implements ActionListener{
         else if(e.getSource() == deleteProduct){
             int selectedRow = table.getSelectedRow();
             if(selectedRow != -1){
-                Model_YourProducts.deleteProduct(selectedRow + 1, Model_YourSales.getUserId(View_Login.getUsernameText()));
+                int idValue = (int) table.getValueAt(selectedRow, 0); 
+                Model_YourProducts.deleteProduct(idValue, Model_YourSales.getUserId(View_Login.getUsernameText()));
                 frame.dispose();
                 new View_YourProducts(Model_YourProducts.getInfoProductsTable(Model_YourSales.getUserId(View_Login.getUsernameText())));
             }
             else{
                 successLabel.setText("Please select a row before proceeding");
+            }
+        }
+        else if(e.getSource() == editStock){
+            int selectRow = table.getSelectedRow();
+            if(selectRow != -1){
+                int idValue = (int) table.getValueAt(selectRow, 0); 
+                
             }
         }
         else if(e.getSource() == goBack){
