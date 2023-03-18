@@ -12,14 +12,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -32,13 +33,15 @@ public class View_YourSales implements ActionListener{
     private static JButton addSale, deleteSale, goBack;
     private static JLabel successLabel;
     private static JTable table;
+    private JTextField searchBar;
+    private DefaultTableModel model;
     private static List<Sales> salesList = Model_YourSales.getSalesObject(Model_YourSales.getUserId(View_Login.getUsernameText()));
     private static int selectedRow = -1;
 
     public View_YourSales(List<Sales> sale) {
         frame = new JFrame("Your sales");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,500 );
+        frame.setSize(1000,500 );
         
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
@@ -70,7 +73,7 @@ public class View_YourSales implements ActionListener{
             data[i][3] = sale.get(i).getAmountOfSale();
             data[i][4] = sale.get(i).getFechaDeVenta();
         }
-        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+        model = new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -83,6 +86,33 @@ public class View_YourSales implements ActionListener{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 selectedRow = table.getSelectedRow();
+            }
+        });
+
+        searchBar = new JTextField(20);
+        searchBar.setFont(buttonFont);
+        searchBar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            private void updateTable() {
+                String userInput = searchBar.getText();
+                List<Sales> filteredSales = Model_YourSales.searchForProductByName(Model_YourSales.getUserId(View_Login.getUsernameText()), userInput);
+                model.setRowCount(0);
+                fillTable(model, filteredSales);
+        
             }
         });
        
@@ -176,16 +206,20 @@ public class View_YourSales implements ActionListener{
     gbc.gridx = 0;
     gbc.gridy = 0;
     buttonPanel.add(menuBar, gbc);
-    
+
     gbc.gridx = 1;
+    gbc.gridy = 0;
+    buttonPanel.add(searchBar, gbc);
+    
+    gbc.gridx = 2;
     gbc.gridy = 0;
     buttonPanel.add(addSale, gbc);
 
-    gbc.gridx = 2;
+    gbc.gridx = 3;
     gbc.gridy = 0;
     buttonPanel.add(deleteSale, gbc);
 
-    gbc.gridx = 3;
+    gbc.gridx = 4;
     gbc.gridy = 0;
     buttonPanel.add(goBack, gbc);
 
@@ -203,6 +237,13 @@ public class View_YourSales implements ActionListener{
 
     frame.add(panel);
     frame.setVisible(true);
+}
+
+private void fillTable(DefaultTableModel tableModel, List<Sales> salesList) {
+    for (Sales sale :salesList ) {
+        Object[] rowData = {sale.getIdVentasForEachUser(), sale.getNameOfProduct(), sale.getPrice(), sale.getAmountOfSale(), sale.getFechaDeVenta()};
+        tableModel.addRow(rowData);
+    }
 }
     
     
@@ -229,7 +270,7 @@ public void actionPerformed(ActionEvent e) {
         frame.dispose();
         new View_MainPage();
     }
-}
+}   
 
     public static List<Sales> getSalesList() {
         return salesList;

@@ -178,6 +178,23 @@ public class Model_YourSales {
         return salesUpdated;
     }
 
+    public static List<Sales> searchForProductByName(int userId, String userInput){
+        List<Sales> salesList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GestionDeVentas.ventas WHERE nombre LIKE ? AND id_users = ?;");
+            statement.setString(1, userInput + "%");
+            statement.setInt(2, userId);
+            ResultSet r1 = statement.executeQuery();
+            while(r1.next()){
+                Sales sale = new Sales(r1.getInt("idVentasForEachUser"), r1.getString("nombre"), r1.getDouble("precio"), r1.getInt("cantidadVendida"), r1.getString("fechaDeVenta") );
+                salesList.add(sale);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return salesList;
+    }
+
     
     
 }

@@ -1,6 +1,7 @@
 package gestiondeventas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.awt.GridBagLayout;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.event.ActionEvent;
@@ -21,7 +23,7 @@ public class View_AddSaleFromProducts implements ActionListener {
     private JPanel panel;
     private JTable table;
     private JLabel success;
-    private JButton addSale, goBack;
+    private JButton addSale, goBack, addAnotherSale;
     private JTextField searchBar;
     private DefaultTableModel tableModel;
     private int selectedRow;
@@ -36,45 +38,55 @@ public class View_AddSaleFromProducts implements ActionListener {
     
         panel = new JPanel(new BorderLayout());
     
-        searchBar = new JTextField(20);
-        searchBar.setFont(buttonFont);
-        searchBar.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateTable();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateTable();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateTable();
-            }
-
-            private void updateTable() {
-                String userInput = searchBar.getText();
-                List<Products> filteredProducts = Model_YourProducts.searchForProductByName(Model_YourSales.getUserId(View_Login.getUsernameText()), userInput);
-                tableModel.setRowCount(0);
-                fillTable(filteredProducts);
-            }
-        });
-    
         JLabel searchLabel = new JLabel("Search by product name:");
         searchLabel.setFont(buttonFont);
     
         addSale = new JButton("Add sale");
         addSale.addActionListener(this);
         addSale.setFont(buttonFont);
-
-        goBack = new JButton("<-");
+    
+        addAnotherSale = new JButton("Add another sale");
+        addAnotherSale.addActionListener(this);
+        addAnotherSale.setFont(buttonFont);
+    
+        goBack = new JButton("←");
         goBack.addActionListener(this);
         addSale.setFont(buttonFont);
     
         success = new JLabel("");
     
+        searchBar = new JTextField(20); 
+        searchBar.setFont(buttonFont);
+        searchBar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            private void updateTable() {
+                String userInput = searchBar.getText();
+                List<Products> filteredProducts = Model_YourProducts.searchForProductByName(Model_YourSales.getUserId(View_Login.getUsernameText()), userInput);
+                tableModel.setRowCount(0);
+                fillTable(tableModel, filteredProducts);
+        
+                // Update the customRenderer with the filteredProducts list
+                CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(filteredProducts);
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                    table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+                }
+            }
+        });
+        
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
     
@@ -89,10 +101,14 @@ public class View_AddSaleFromProducts implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 0;
         buttonPanel.add(addSale, gbc);
-
+    
         gbc.gridx = 3;
         gbc.gridy = 0;
-        buttonPanel.add(goBack,gbc);
+        buttonPanel.add(addAnotherSale, gbc);
+    
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        buttonPanel.add(goBack, gbc);
     
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -107,11 +123,22 @@ public class View_AddSaleFromProducts implements ActionListener {
                 return false;
             }
         };
-
-        fillTable(productsList);
+    
+        fillTable(tableModel, productsList); // Pass both tableModel and productsList as parameters
     
         table = new JTable(tableModel);
-        table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineTableCellRenderer());
+    
+        CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(productsList);
+        CustomMultiLineTableCellRenderer customMultiLineRenderer = new CustomMultiLineTableCellRenderer(productsList);
+    
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            if (i == 2) {
+                table.getColumnModel().getColumn(i).setCellRenderer(customMultiLineRenderer);
+            } else {
+                table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+            }
+        }
+        
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
     
@@ -120,38 +147,69 @@ public class View_AddSaleFromProducts implements ActionListener {
     }
     
 
-    private void fillTable(List<Products> productsList) {
+    private void fillTable(DefaultTableModel tableModel, List<Products> productsList) {
         for (Products product : productsList) {
             Object[] rowData = {product.getIdProductsForEachUser(), product.getName(), product.getDescription(), product.getPrecio(), product.getStock(), product.getMin_stock_alert()};
             tableModel.addRow(rowData);
         }
     }
+    
 
-    private class MultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
-        public MultiLineTableCellRenderer() {
+    public static class CustomMultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
+        private List<Products> products;
+    
+        public CustomMultiLineTableCellRenderer(List<Products> products) {
+            this.products = products;
             setLineWrap(true);
             setWrapStyleWord(true);
-            setOpaque(true);
         }
-
-        @Override
+    
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText(value.toString());
-            setSize(table.getColumnModel().getColumn(column).getWidth(), 0);
-            int height_needed = getPreferredSize().height;
-            if (table.getRowHeight(row)!= height_needed) {
-                table.setRowHeight(row, height_needed);
+            setText((String) value);
+            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+            if (table.getRowHeight(row) != getPreferredSize().height) {
+                table.setRowHeight(row, getPreferredSize().height);
             }
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
+    
+            Products product = products.get(row);
+            if (product.getStock() <= product.getMin_stock_alert()) {
+                setBackground(Color.RED);
             } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
+                setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             }
+    
+            setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+    
             return this;
         }
     }
+    
+
+    public static class CustomTableCellRenderer extends DefaultTableCellRenderer {
+        private List<Products> products;
+    
+        public CustomTableCellRenderer(List<Products> products) {
+            this.products = products;
+        }
+    
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            Products product = products.get(row);
+    
+            if (product.getStock() <= product.getMin_stock_alert()) {
+                c.setBackground(Color.RED);
+            } else {
+                c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+            }
+            c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+    
+            return c;
+        }
+    }
+    
+    
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -167,6 +225,10 @@ public class View_AddSaleFromProducts implements ActionListener {
                 new View_AddDateAndQuantityForSale();
             }
 
+        }
+        else if(e.getSource() == addAnotherSale){
+            frame.dispose();
+            new View_AddSaleButton();
         }
         else if(e.getSource() == goBack){
             frame.dispose();

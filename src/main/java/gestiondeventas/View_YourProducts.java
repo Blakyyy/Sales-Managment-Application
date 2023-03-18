@@ -14,12 +14,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -31,12 +34,14 @@ public class View_YourProducts implements ActionListener{
     private JPanel panel;
     private JTable table;
     private JButton addProduct, deleteProduct, goBack;
+    private JTextField searchBar;
+    private DefaultTableModel tableModel;
     private static JLabel successLabel;
 
     public View_YourProducts(List<Products> products) {
         frame = new JFrame("Your Inventory");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
+        frame.setSize(1000, 500);
 
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
@@ -162,20 +167,64 @@ public class View_YourProducts implements ActionListener{
         sortMenu.add(maxStockDescItem);
         menuBar.add(sortMenu);
 
+        searchBar = new JTextField(20);
+        searchBar.setFont(buttonFont);
+        searchBar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateTable();
+            }
+        
+            private void updateTable() {
+                String userInput = searchBar.getText();
+                List<Products> filteredProducts = Model_YourProducts.searchForProductByName(Model_YourSales.getUserId(View_Login.getUsernameText()), userInput);
+                tableModel.setRowCount(0);
+                fillTable(tableModel, filteredProducts);
+        
+                CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(filteredProducts);
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                    table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+                }
+            }
+        });
+
+        JLabel searchLabel = new JLabel("Search by product name:");
+        searchLabel.setFont(buttonFont);
+        searchLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));         
+
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         buttonPanel.add(menuBar, gbc);
-        
+
         gbc.gridx = 1;
+        gbc.gridy = 0;
+        buttonPanel.add(searchLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        buttonPanel.add(searchBar, gbc);
+        
+        gbc.gridx = 3;
         gbc.gridy = 0;
         buttonPanel.add(addProduct, gbc);
     
-        gbc.gridx = 2;
+        gbc.gridx = 4;
         gbc.gridy = 0;
         buttonPanel.add(deleteProduct, gbc);
     
-        gbc.gridx = 3;
+        gbc.gridx = 5;
         gbc.gridy = 0;
         buttonPanel.add(goBack, gbc);
     
@@ -189,7 +238,7 @@ public class View_YourProducts implements ActionListener{
         panel.add(successPanel, BorderLayout.SOUTH);
 
         String[] columnNames = {"ID", "Name", "Description", "Price", "Stock", "Minimum Stock Alert"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+        tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -207,8 +256,17 @@ public class View_YourProducts implements ActionListener{
         for (int i = 0; i < columnWidths.length; i++) {
             table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
         }
+        
+        CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(products);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+        }
 
-        table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineTableCellRenderer());
+        table.getColumnModel().getColumn(2).setCellRenderer(new CustomTableCellRenderer(products));
+        table.getColumnModel().getColumn(2).setCellRenderer(new CustomMultiLineTableCellRenderer(products));
+
+        
+
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
@@ -216,31 +274,66 @@ public class View_YourProducts implements ActionListener{
         frame.setVisible(true);
     }
 
-    private class MultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
-        public MultiLineTableCellRenderer() {
+    private void fillTable(DefaultTableModel tableModel, List<Products> productsList) {
+        for (Products product : productsList) {
+            Object[] rowData = {product.getIdProductsForEachUser(), product.getName(), product.getDescription(), product.getPrecio(), product.getStock(), product.getMin_stock_alert()};
+            tableModel.addRow(rowData);
+        }
+    }
+
+    public static class CustomMultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
+        private List<Products> products;
+    
+        public CustomMultiLineTableCellRenderer(List<Products> products) {
+            this.products = products;
             setLineWrap(true);
             setWrapStyleWord(true);
-            setOpaque(true);
         }
-
-        @Override
+    
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText(value.toString());
-            setSize(table.getColumnModel().getColumn(column).getWidth(), 0);
-            int height_needed = getPreferredSize().height;
-            if (table.getRowHeight(row) != height_needed) {
-                table.setRowHeight(row, height_needed);
+            setText((String) value);
+            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
+            if (table.getRowHeight(row) != getPreferredSize().height) {
+                table.setRowHeight(row, getPreferredSize().height);
             }
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
+    
+            Products product = products.get(row);
+            if (product.getStock() <= product.getMin_stock_alert()) {
+                setBackground(Color.RED);
             } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
+                setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
             }
+    
+            setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+    
             return this;
         }
     }
+    
+
+    public static class CustomTableCellRenderer extends DefaultTableCellRenderer {
+        private List<Products> products;
+    
+        public CustomTableCellRenderer(List<Products> products) {
+            this.products = products;
+        }
+    
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            Products product = products.get(row);
+    
+            if (product.getStock() <= product.getMin_stock_alert()) {
+                c.setBackground(Color.RED);
+            } else {
+                c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+            }
+            c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+    
+            return c;
+        }
+    }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {

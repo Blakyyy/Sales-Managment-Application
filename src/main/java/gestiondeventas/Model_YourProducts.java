@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.protobuf.TypeRegistry;
-import com.mysql.cj.protocol.WatchableOutputStream;
 
 
 public class Model_YourProducts {
@@ -190,8 +188,9 @@ public class Model_YourProducts {
     public static List<Products> searchForProductByName(int userId, String userInput){
         List<Products> productsList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GestionDeVentas.productos WHERE nombre LIKE ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GestionDeVentas.productos WHERE nombre LIKE ? AND id_user = ?;");
             statement.setString(1, userInput + "%");
+            statement.setInt(2, userId);
             ResultSet r1 = statement.executeQuery();
             while(r1.next()){
                 Products product = new Products(r1.getInt("id_productosForEachUser"), r1.getString("nombre"), r1.getString("descripcion"), r1.getDouble("precio"), r1.getInt("stock"), userId , r1.getInt("min_stock_alert"));
@@ -249,5 +248,6 @@ public class Model_YourProducts {
         }
         return false;
     }
+
     
 }
