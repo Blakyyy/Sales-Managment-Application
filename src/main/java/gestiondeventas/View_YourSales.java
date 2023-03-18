@@ -89,6 +89,10 @@ public class View_YourSales implements ActionListener{
             }
         });
 
+        JLabel searchLabel = new JLabel("Search by product name:");
+        searchLabel.setFont(buttonFont);
+        searchLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));   
+
         searchBar = new JTextField(20);
         searchBar.setFont(buttonFont);
         searchBar.getDocument().addDocumentListener(new DocumentListener() {
@@ -209,17 +213,21 @@ public class View_YourSales implements ActionListener{
 
     gbc.gridx = 1;
     gbc.gridy = 0;
+    buttonPanel.add(searchLabel, gbc);
+
+    gbc.gridx = 2;
+    gbc.gridy = 0;
     buttonPanel.add(searchBar, gbc);
     
-    gbc.gridx = 2;
+    gbc.gridx = 3;
     gbc.gridy = 0;
     buttonPanel.add(addSale, gbc);
 
-    gbc.gridx = 3;
+    gbc.gridx = 4;
     gbc.gridy = 0;
     buttonPanel.add(deleteSale, gbc);
 
-    gbc.gridx = 4;
+    gbc.gridx = 5;
     gbc.gridy = 0;
     buttonPanel.add(goBack, gbc);
 
