@@ -32,7 +32,7 @@ public class View_AddSaleFromProducts implements ActionListener {
     public View_AddSaleFromProducts(List<Products> productsList) {
         frame = new JFrame("Choose the product you have sold");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
+        frame.setSize(1000, 500);
     
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
     
@@ -41,11 +41,11 @@ public class View_AddSaleFromProducts implements ActionListener {
         JLabel searchLabel = new JLabel("Search by product name:");
         searchLabel.setFont(buttonFont);
     
-        addSale = new JButton("Add sale");
+        addSale = new JButton("Add Inventory Sale");
         addSale.addActionListener(this);
         addSale.setFont(buttonFont);
     
-        addAnotherSale = new JButton("Add another sale");
+        addAnotherSale = new JButton("Add Non-Inventory Sale");
         addAnotherSale.addActionListener(this);
         addAnotherSale.setFont(buttonFont);
     
@@ -79,7 +79,6 @@ public class View_AddSaleFromProducts implements ActionListener {
                 tableModel.setRowCount(0);
                 fillTable(tableModel, filteredProducts);
         
-                // Update the customRenderer with the filteredProducts list
                 CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(filteredProducts);
                 for (int i = 0; i < table.getColumnCount(); i++) {
                     table.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
@@ -111,7 +110,7 @@ public class View_AddSaleFromProducts implements ActionListener {
         buttonPanel.add(goBack, gbc);
     
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         buttonPanel.add(success, gbc);
     
         panel.add(buttonPanel, BorderLayout.NORTH);
@@ -154,63 +153,6 @@ public class View_AddSaleFromProducts implements ActionListener {
         }
     }
     
-
-    public static class CustomMultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
-        private List<Products> products;
-    
-        public CustomMultiLineTableCellRenderer(List<Products> products) {
-            this.products = products;
-            setLineWrap(true);
-            setWrapStyleWord(true);
-        }
-    
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            setText((String) value);
-            setSize(table.getColumnModel().getColumn(column).getWidth(), getPreferredSize().height);
-            if (table.getRowHeight(row) != getPreferredSize().height) {
-                table.setRowHeight(row, getPreferredSize().height);
-            }
-    
-            Products product = products.get(row);
-            if (product.getStock() <= product.getMin_stock_alert()) {
-                setBackground(Color.RED);
-            } else {
-                setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-            }
-    
-            setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-    
-            return this;
-        }
-    }
-    
-
-    public static class CustomTableCellRenderer extends DefaultTableCellRenderer {
-        private List<Products> products;
-    
-        public CustomTableCellRenderer(List<Products> products) {
-            this.products = products;
-        }
-    
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            Products product = products.get(row);
-    
-            if (product.getStock() <= product.getMin_stock_alert()) {
-                c.setBackground(Color.RED);
-            } else {
-                c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-            }
-            c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-    
-            return c;
-        }
-    }
-    
-    
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == addSale){

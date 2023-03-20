@@ -131,7 +131,7 @@ public class View_AddSaleButton implements ActionListener{
         }
         else if(e.getSource() == goBack){
             frame.dispose();
-            new View_YourSales(Model_YourSales.getInfoVentasTable());
+            new View_AddSaleFromProducts(Model_YourProducts.getInfoProductsTable(Model_YourSales.getUserId(View_Login.getUsernameText())));
         }
     }
 

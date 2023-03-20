@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.event.ActionEvent;
@@ -315,30 +314,6 @@ public class View_YourProducts implements ActionListener{
             setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
     
             return this;
-        }
-    }
-    
-
-    public static class CustomTableCellRenderer extends DefaultTableCellRenderer {
-        private List<Products> products;
-    
-        public CustomTableCellRenderer(List<Products> products) {
-            this.products = products;
-        }
-    
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            Products product = products.get(row);
-    
-            if (product.getStock() <= product.getMin_stock_alert()) {
-                c.setBackground(Color.RED);
-            } else {
-                c.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-            }
-            c.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-    
-            return c;
         }
     }
     
