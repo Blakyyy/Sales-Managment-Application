@@ -210,21 +210,25 @@ public class View_YourProducts implements ActionListener{
         gbc.gridy = 0;
         buttonPanel.add(deleteProduct, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 1;
-        buttonPanel.add(editStock, gbc);
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        buttonPanel.add(editName, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 2;
-        buttonPanel.add(editName, gbc);
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        buttonPanel.add(editStock, gbc);
     
         gbc.gridx = 6;
         gbc.gridy = 0;
         buttonPanel.add(goBack, gbc);
     
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 5;
         gbc.anchor = GridBagConstraints.CENTER;
         buttonPanel.add(successLabel, gbc);
 
