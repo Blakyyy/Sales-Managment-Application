@@ -1,20 +1,12 @@
 package gestiondeventas;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
 
 public class View_AddSaleFromProducts implements ActionListener {
@@ -123,8 +115,7 @@ public class View_AddSaleFromProducts implements ActionListener {
             }
         };
     
-        fillTable(tableModel, productsList); // Pass both tableModel and productsList as parameters
-    
+        fillTable(tableModel, productsList); 
         table = new JTable(tableModel);
     
         CustomTableCellRenderer customRenderer = new CustomTableCellRenderer(productsList);

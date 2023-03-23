@@ -1,31 +1,15 @@
 package gestiondeventas;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.List;
-import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+
+import java.util.List;
 
 public class View_YourProducts implements ActionListener{
 
@@ -340,7 +324,11 @@ public class View_YourProducts implements ActionListener{
             int selectRow = table.getSelectedRow();
             if(selectRow != -1){
                 int idValue = (int) table.getValueAt(selectRow, 0); 
-                
+                frame.dispose();
+                new View_EditStock(idValue);
+            }
+            else{
+                successLabel.setText("Please select a row before proceeding");
             }
         }
         else if(e.getSource() == goBack){

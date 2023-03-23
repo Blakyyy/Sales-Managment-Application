@@ -1,13 +1,8 @@
 package gestiondeventas;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
-
 
 public class View_AddDateAndQuantityForSale implements ActionListener {
 
