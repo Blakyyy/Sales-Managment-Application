@@ -16,7 +16,7 @@ public class View_YourProducts implements ActionListener{
     private JFrame frame;
     private JPanel panel;
     private JTable table;
-    private JButton addProduct, deleteProduct, editStock, goBack;
+    private JButton addProduct, deleteProduct, editStock, editName, goBack;
     private JTextField searchBar;
     private DefaultTableModel tableModel;
     private static JLabel successLabel;
@@ -43,6 +43,10 @@ public class View_YourProducts implements ActionListener{
         editStock.addActionListener(this);
         editStock.setFont(buttonFont);
 
+        editName = new JButton("Edit name");
+        editName.addActionListener(this);
+        editName.setFont(buttonFont);
+
         goBack = new JButton("←");
         goBack.addActionListener(this);
         goBack.setFont(buttonFont);
@@ -61,11 +65,6 @@ public class View_YourProducts implements ActionListener{
         menuBar.setBackground(new Color(238, 238, 238));
         JMenu sortMenu = new JMenu("Sort by");
         sortMenu.setFont(buttonFont);
-        
-        buttonPanel.add(menuBar);
-        buttonPanel.add(addProduct);
-        buttonPanel.add(deleteProduct);
-        buttonPanel.add(goBack);
 
         JMenuItem idAscItem = new JMenuItem("Id(↑)");
         idAscItem.addActionListener(new ActionListener() {
@@ -211,15 +210,19 @@ public class View_YourProducts implements ActionListener{
         gbc.gridy = 0;
         buttonPanel.add(deleteProduct, gbc);
 
-        gbc.gridx = 5;
-        gbc.gridy = 0;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         buttonPanel.add(editStock, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        buttonPanel.add(editName, gbc);
     
         gbc.gridx = 6;
         gbc.gridy = 0;
         buttonPanel.add(goBack, gbc);
     
-        gbc.gridx = 1;
+        gbc.gridx = 3;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -326,6 +329,17 @@ public class View_YourProducts implements ActionListener{
                 int idValue = (int) table.getValueAt(selectRow, 0); 
                 frame.dispose();
                 new View_EditStock(idValue);
+            }
+            else{
+                successLabel.setText("Please select a row before proceeding");
+            }
+        }
+        else if(e.getSource() == editName){
+            int selectRow = table.getSelectedRow();
+            if(selectRow != -1){
+                int idValue = (int) table.getValueAt(selectRow, 0);
+                frame.dispose();
+                new View_EditName(idValue);
             }
             else{
                 successLabel.setText("Please select a row before proceeding");

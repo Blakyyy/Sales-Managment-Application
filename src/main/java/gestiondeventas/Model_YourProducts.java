@@ -264,5 +264,20 @@ public class Model_YourProducts {
         return false;
     }
 
+    public static boolean updateProductName(String newName, int userId, int id_ProductosForEachUser){
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE GestionDeVentas.productos SET nombre = ? WHERE id_user = ? AND id_ProductosForEachUser = ?");
+            statement.setString(1, newName);
+            statement.setInt(2, userId);
+            statement.setInt(3, id_ProductosForEachUser);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+
     
 }
