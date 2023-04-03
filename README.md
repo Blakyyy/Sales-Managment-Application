@@ -39,6 +39,7 @@ Upon launching the application, users will be prompted to log in or create a new
 In the "Your Products" section, users can view, edit, and delete their product inventory, as well as add new products.
 
 In the "Your Sales" section, users can view and sort their sales data, as well as add new sales data and associate it with a product from their inventory.
+
 Contributing
 ------------
 
