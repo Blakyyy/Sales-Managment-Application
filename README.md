@@ -47,4 +47,5 @@ Contributions are welcome! If you have any suggestions or find any bugs, please 
 License
 -------
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under a proprietary license. All rights reserved. Unauthorized copying, modifying, or distributing of this software, or its documentation, is strictly prohibited. For more information, please contact the owner of this project at daniil.kobzar299@gmail.com.
+
