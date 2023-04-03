@@ -9,12 +9,6 @@ public class Products {
     private int stock;
     private int idUser;
     private int min_stock_alert;
-   
-
-
-    public int getMin_stock_alert() {
-        return min_stock_alert;
-    }
 
     public Products(int idProductsForEachUser, String name, String description, Double precio, int stock, int idUser, int min_stock_alert) {
         this.idProductsForEachUser = idProductsForEachUser;
@@ -26,32 +20,33 @@ public class Products {
         this.min_stock_alert = min_stock_alert;
     }
 
+    public int getIdProductsForEachUser() {
+        return idProductsForEachUser;
+    }
+
     public String getName() {
         return name;
     }
-
 
     public String getDescription() {
         return description;
     }
 
-
     public Double getPrecio() {
         return precio;
     }
-
 
     public int getStock() {
         return stock;
     }
 
-
     public int getIdUser() {
         return idUser;
     }
 
-
-    public int getIdProductsForEachUser() {
-        return idProductsForEachUser;
+    public int getMin_stock_alert() {
+        return min_stock_alert;
     }
+
+ 
 }
