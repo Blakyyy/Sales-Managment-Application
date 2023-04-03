@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,6 +6,11 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+
+import gestiondeventas.Models.Model_YourProducts;
+import gestiondeventas.Models.Model_YourSales;
+import gestiondeventas.Models.Sales;
+
 import java.util.List;
 
 

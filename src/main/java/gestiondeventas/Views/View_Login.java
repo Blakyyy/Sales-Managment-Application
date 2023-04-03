@@ -1,14 +1,16 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import gestiondeventas.Models.Model_RegAndLog;
+
 import java.awt.event.*;
 
 public class View_Login extends Model_RegAndLog implements ActionListener{
-    //This class is the firs GUI that user see when stars a program
     private static JFrame frame;
     private static JPanel pannel;
     private static JLabel userLabel;

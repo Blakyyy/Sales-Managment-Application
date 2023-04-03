@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Models;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.TableCellRenderer;
 
-class CustomMultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
+public class CustomMultiLineTableCellRenderer extends JTextArea implements TableCellRenderer {
     private List<Products> products;
 
     public CustomMultiLineTableCellRenderer(List<Products> products) {

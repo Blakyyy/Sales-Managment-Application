@@ -1,8 +1,12 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import gestiondeventas.Models.Model_AddSale;
+import gestiondeventas.Models.Model_YourProducts;
+import gestiondeventas.Models.Model_YourSales;
 
 public class View_AddProductButton implements ActionListener{
     private static JFrame frame;

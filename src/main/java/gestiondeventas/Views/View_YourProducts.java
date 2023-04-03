@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +8,12 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+
+import gestiondeventas.Models.CustomMultiLineTableCellRenderer;
+import gestiondeventas.Models.CustomTableCellRenderer;
+import gestiondeventas.Models.Model_YourProducts;
+import gestiondeventas.Models.Model_YourSales;
+import gestiondeventas.Models.Products;
 
 import java.util.List;
 

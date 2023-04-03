@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Models;
 
 public class Products {
 

@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -10,6 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import gestiondeventas.Models.Model_AddSale;
+import gestiondeventas.Models.Model_YourProducts;
+import gestiondeventas.Models.Model_YourSales;
 
 public class View_EditStock implements ActionListener{
     private JFrame frame;

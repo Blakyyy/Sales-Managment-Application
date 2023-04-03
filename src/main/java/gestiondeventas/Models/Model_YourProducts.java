@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Models;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Models;
 
 public class Sales {
     
@@ -33,8 +33,4 @@ public class Sales {
         return idVentasForEachUser;
     }
    
-    
-    
-    
-    
 }

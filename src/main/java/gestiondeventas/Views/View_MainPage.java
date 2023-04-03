@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Views;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,6 +7,10 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import gestiondeventas.Models.Model_YourProducts;
+import gestiondeventas.Models.Model_YourSales;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

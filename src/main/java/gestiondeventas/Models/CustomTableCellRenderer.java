@@ -1,4 +1,4 @@
-package gestiondeventas;
+package gestiondeventas.Models;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-class CustomTableCellRenderer extends DefaultTableCellRenderer {
+public class CustomTableCellRenderer extends DefaultTableCellRenderer {
     private List<Products> products;
 
     public CustomTableCellRenderer(List<Products> products) {
