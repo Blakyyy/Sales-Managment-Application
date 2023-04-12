@@ -1,5 +1,4 @@
 package gestiondeventas.Models;
-
 import gestiondeventas.Views.View_Login;
 
 public class App 

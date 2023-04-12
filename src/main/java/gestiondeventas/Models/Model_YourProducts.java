@@ -277,6 +277,20 @@ public class Model_YourProducts {
         }
         return false;
     }
+
+    public static boolean updateDescription(String newDescription, int user_id, int id_productosForEachUser){
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE GestionDeVentas.productos SET descripcion = ? WHERE id_user = ? AND id_ProductosForEachUser = ?");
+            statement.setString(1, newDescription);
+            statement.setInt(2, user_id);
+            statement.setInt(3, id_productosForEachUser);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     
 
     

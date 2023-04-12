@@ -22,7 +22,7 @@ public class View_YourProducts implements ActionListener{
     private JFrame frame;
     private JPanel panel;
     private JTable table;
-    private JButton addProduct, deleteProduct, editStock, editName, goBack;
+    private JButton addProduct, deleteProduct, editStock, editName, editDescription, goBack;
     private JTextField searchBar;
     private DefaultTableModel tableModel;
     private static JLabel successLabel;
@@ -52,6 +52,10 @@ public class View_YourProducts implements ActionListener{
         editName = new JButton("Edit name");
         editName.addActionListener(this);
         editName.setFont(buttonFont);
+
+        editDescription = new JButton("Edit description");
+        editDescription.addActionListener(this);
+        editDescription.setFont(buttonFont);
 
         goBack = new JButton("←");
         goBack.addActionListener(this);
@@ -226,6 +230,12 @@ public class View_YourProducts implements ActionListener{
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(3, 0, 0, 0);
+        buttonPanel.add(editDescription, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(3, 0, 0, 0);
         buttonPanel.add(editStock, gbc);
     
         gbc.gridx = 6;
@@ -321,7 +331,18 @@ public class View_YourProducts implements ActionListener{
             if(selectRow != -1){
                 int idValue = (int) table.getValueAt(selectRow, 0);
                 frame.dispose();
-                new View_EditName(idValue);
+                new View_EditName(idValue, "Edit name", "Insert new name: ");
+            }
+            else{
+                successLabel.setText("Please select a row before proceeding");
+            }
+        }
+        else if(e.getSource() == editDescription){
+            int selectRow = table.getSelectedRow();
+            if(selectRow != -1){
+                int idValue = (int) table.getValueAt(selectRow, 0);
+                frame.dispose();
+                new View_EditDescription(idValue, "Edit description", "Insert new description: ");
             }
             else{
                 successLabel.setText("Please select a row before proceeding");

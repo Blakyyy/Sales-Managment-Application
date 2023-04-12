@@ -17,17 +17,18 @@ import gestiondeventas.Models.Model_YourSales;
 
 
 public class View_EditName implements ActionListener {
-    private JFrame frame;
+    protected JFrame frame;
     private JPanel panel;
     private GridBagConstraints gbc = new GridBagConstraints();
-    private JButton submit, goback;
-    private JLabel insertNewName, succes;
-    private JTextField newName;
-    private int idOFProduct;
+    protected JButton submit;
+    protected JButton goback;
+    protected JLabel insertNewName, succes;
+    protected JTextField newName;
+    protected int idOFProduct;
 
-    public View_EditName(int idOfProduct){
-        frame = new JFrame("Edit name");
-        frame.setBounds(200, 200, 400, 130);
+    public View_EditName(int idOfProduct, String frameTitle, String labelS){
+        frame = new JFrame(frameTitle);
+        frame.setBounds(200, 200, 400, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
@@ -35,7 +36,7 @@ public class View_EditName implements ActionListener {
         panel.setBounds(200, 200, 300, 300);
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
-        insertNewName = new JLabel("Insert new name: ");
+        insertNewName = new JLabel(labelS);
         insertNewName.setFont(buttonFont);
 
         succes = new JLabel();
