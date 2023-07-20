@@ -45,6 +45,7 @@ Contributing
 
 Contributions are welcome! If you have any suggestions or find any bugs, please create an issue or submit a pull request.
 Hello hello!
+Its me Dani!
 
 License
 -------
