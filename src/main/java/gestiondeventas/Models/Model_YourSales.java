@@ -11,9 +11,9 @@ import java.util.List;
 
 
 public class Model_YourSales {
-    private static String url = "jdbc:mysql://localhost:3306/?user=root";
-    private static String admin = "root";
-    private static String passkey = "6751221T";
+    private static String url = "your-url-for-mysql-database-here";
+    private static String admin = "your-admin-for-mysql-database-here";
+    private static String passkey = "your-password-for-mysql-database-here";
 
     public static boolean addToSales(String name, Double precio, int CantidadVendida, String FechaDeVenta, int id_users, int idVentasForEachUser){
         try(Connection connection = DriverManager.getConnection(url, admin, passkey)) {

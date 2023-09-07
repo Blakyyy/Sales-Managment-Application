@@ -11,9 +11,9 @@ import java.util.List;
 
 
 public class Model_YourProducts {
-    private static String url = "jdbc:mysql://localhost:3306/?user=root";
-    private static String admin = "root";
-    private static String passkey = "6751221T";
+    private static String url = "your-url-for-mysql-database-here";
+    private static String admin = "your-admin-for-mysql-database-here";
+    private static String passkey = "your-password-for-mysql-database-here";
 
     public static List<Products> getInfoProductsTable(int userId){
         List<Products> productsUpdated = new ArrayList<>();
@@ -292,6 +292,19 @@ public class Model_YourProducts {
         return false;
     }
     
+    public static boolean updatePrice(double newPrice, int user_id, int id_productosForEachUser){
+        try (Connection connection = DriverManager.getConnection(url, admin, passkey)) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE GestionDeVentas.productos SET precio = ? WHERE id_user = ? AND id_ProductosForEachUser = ?");
+            statement.setDouble(1, newPrice);
+            statement.setInt(2, user_id);
+            statement.setInt(3, id_productosForEachUser);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     
 }

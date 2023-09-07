@@ -11,9 +11,9 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class Model_RegAndLog {
     //This class has all Backends methods to work with MySQL Database
-    private String url = "jdbc:mysql://localhost:3306/?user=root";
-    private String admin = "root";
-    private String passkey = "6751221T";
+    private String url = "your-url-for-mysql-database-here";
+    private String admin = "your-admin-for-mysql-database-here";
+    private String passkey = "your-password-for-mysql-database-here";
 
     //We use this method to try to Sig in to our account (which must be already in database)
     public boolean tryToLogin(String username, String password, String url, String admin, String passkey){

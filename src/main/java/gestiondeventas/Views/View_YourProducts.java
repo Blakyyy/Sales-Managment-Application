@@ -22,7 +22,7 @@ public class View_YourProducts implements ActionListener{
     private JFrame frame;
     private JPanel panel;
     private JTable table;
-    private JButton addProduct, deleteProduct, editStock, editName, editDescription, goBack;
+    private JButton addProduct, deleteProduct, editStock, editName, editDescription, editPrice, editMinStock, goBack;
     private JTextField searchBar;
     private DefaultTableModel tableModel;
     private static JLabel successLabel;
@@ -56,6 +56,14 @@ public class View_YourProducts implements ActionListener{
         editDescription = new JButton("Edit description");
         editDescription.addActionListener(this);
         editDescription.setFont(buttonFont);
+
+        editPrice = new JButton("Edit price");
+        editPrice.addActionListener(this);
+        editPrice.setFont(buttonFont);
+
+        editMinStock = new JButton("Edit min stock alert");
+        editMinStock.addActionListener(this);
+        editMinStock.setFont(buttonFont);
 
         goBack = new JButton("←");
         goBack.addActionListener(this);
@@ -220,23 +228,33 @@ public class View_YourProducts implements ActionListener{
         gbc.gridy = 0;
         buttonPanel.add(deleteProduct, gbc);
 
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(3, 0, 0, 0);
         buttonPanel.add(editName, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(3, 0, 0, 0);
         buttonPanel.add(editDescription, gbc);
 
-        gbc.gridx = 2;
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        buttonPanel.add(editPrice, gbc);
+
+        gbc.gridx = 4;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(3, 0, 0, 0);
         buttonPanel.add(editStock, gbc);
+
+        gbc.gridx = 5;
+        gbc.gridy = 1;
+        buttonPanel.add(editMinStock, gbc);
     
         gbc.gridx = 6;
         gbc.gridy = 0;
@@ -345,6 +363,27 @@ public class View_YourProducts implements ActionListener{
                 new View_EditDescription(idValue, "Edit description", "Insert new description: ");
             }
             else{
+                successLabel.setText("Please select a row before proceeding");
+            }
+        }
+        else if(e.getSource() == editPrice){
+            int selectRow = table.getSelectedRow();
+            if(selectRow != -1){
+                int idValue = (int) table.getValueAt(selectRow, 0);
+                frame.dispose();
+                new View_EditPrice(idValue, "Edit price", "Insert new price: ");
+            }
+            else{
+                successLabel.setText("Please select a row before proceeding");
+            }
+        }
+        else if(e.getSource() == editMinStock){
+            int selectRow = table.getSelectedRow();
+            if(selectRow != -1){
+                int idValue = (int) table.getValueAt(selectRow, 0);
+                frame.dispose();
+                new View_EditMinStockAlert(idValue, "Edit min stock alert", "Insert new min stock alert");
+            }else{
                 successLabel.setText("Please select a row before proceeding");
             }
         }

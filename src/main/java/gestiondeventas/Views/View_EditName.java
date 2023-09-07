@@ -28,12 +28,12 @@ public class View_EditName implements ActionListener {
 
     public View_EditName(int idOfProduct, String frameTitle, String labelS){
         frame = new JFrame(frameTitle);
-        frame.setBounds(200, 200, 400, 150);
+        frame.setBounds(350, 350, 600, 100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
         panel = new JPanel();
-        panel.setBounds(200, 200, 300, 300);
+        panel.setBounds(300, 300, 500, 100);
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
         insertNewName = new JLabel(labelS);
